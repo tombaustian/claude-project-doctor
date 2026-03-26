@@ -92,6 +92,8 @@ Ergänze `.claude/settings.json` so, dass alle neu installierten Bausteine dauer
 
 Nach dem Audit kennt der Skill den Projekttyp, den Tech-Stack und die bestehenden Skills. Nutze dieses Wissen, um aktiv nach passenden zusätzlichen Skills zu suchen und sie nach User-Freigabe zu installieren.
 
+**Wichtig:** Lies zuerst `references/essential-skills-checklist.md` — diese Checkliste definiert 7 Kategorien essenzieller Skills/Rules, die bei JEDEM Projekt automatisch geprueft werden muessen (Security, Git/Backup, Dokumentation, Code-Qualitaet, Organisation, Claude-Hygiene, Deployment). Pruefe den Ist-Zustand gegen diese Checkliste und zeige dem User eine klare Uebersicht: was fehlt, was vorhanden ist, was dringend empfohlen wird.
+
 ### Schritt 1: Projekt-Profil erstellen
 
 Analysiere aus dem Audit:
