@@ -1,5 +1,5 @@
 ---
-name: "project-audit-modernize"
+name: "claude-project-doctor"
 description: "Auditiert und modernisiert ein bestehendes Claude-Code-Projekt mit RuFlo-Integration konservativ und reversibel. Nutze diesen Skill immer dann, wenn der User sein Arbeitsverzeichnis, seine Claude-Struktur, seine RuFlo-Integration, seine CLAUDE.md, Hooks, Skills, Settings, Rules oder Workflows auf Best-Practice-Stand bringen möchte – auch wenn er nur von 'aufräumen', 'aufhübschen', 'bereinigen', 'sauber machen', 'aktualisieren' oder 'verbessern' spricht. Trigger auch bei: 'Projekt-Audit', 'Claude-Struktur prüfen', 'Ist mein Setup gut?', 'RuFlo-Setup überprüfen', 'Was fehlt in meinem Projekt?', 'mein Projekt modernisieren', 'Claude-Konfiguration checken', 'Setup Health Check'."
 ---
 
