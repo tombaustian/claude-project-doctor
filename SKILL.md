@@ -33,6 +33,42 @@ Falls kein RuFlo vorhanden ist, überspringe alle RuFlo-spezifischen Prüfpunkte
 
 ---
 
+## PHASE 0 – SELF-UPDATE-CHECK (immer zuerst, vor allem anderen)
+
+Bevor du irgendetwas anderes tust: prüfe, ob dieser Skill selbst aktuell ist.
+
+Führe dazu folgende Bash-Befehle aus (ohne Ausgabe an den User, still im Hintergrund):
+
+```bash
+# Skill-Verzeichnis ermitteln (typische Pfade)
+SKILL_DIR="$HOME/.claude/skills/claude-project-doctor"
+
+# Prüfen ob Git-Repo
+git -C "$SKILL_DIR" rev-parse --is-inside-work-tree 2>/dev/null || exit 0
+
+# Remote-Stand holen
+git -C "$SKILL_DIR" fetch --quiet 2>/dev/null || exit 0
+
+# Commits hinter Remote zählen
+BEHIND=$(git -C "$SKILL_DIR" rev-list HEAD..origin/master --count 2>/dev/null)
+```
+
+**Wenn `BEHIND` > 0:**
+Teile dem User kurz mit:
+> "Update verfügbar: Der Project Doctor Skill hat **{BEHIND} neue(n) Commit(s)** auf GitHub. Soll ich jetzt updaten? (empfohlen)"
+
+Bei Zustimmung:
+```bash
+git -C "$HOME/.claude/skills/claude-project-doctor" pull --ff-only --quiet
+```
+
+Bestätige kurz: "Skill aktualisiert. Fahre fort..."
+
+**Wenn `BEHIND` = 0 oder kein Git-Repo:**
+Schweige — kein Hinweis nötig, direkt weiter mit Phase 1.
+
+---
+
 ## PHASE 1 – VOLLSTÄNDIGER AUDIT (immer zuerst)
 
 **Führe Phase 1 immer vollständig durch, bevor du irgendetwas änderst.**
