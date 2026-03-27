@@ -1,0 +1,19 @@
+# Backups und temporäre Dateien
+*.backup
+*.bak
+*.tmp
+*.backup-pre-audit
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (falls Scripts npm nutzen)
+node_modules/
+
+# Lokale Konfiguration
+.env
+.env.local
+*.key
+*.credentials.json
+token.json
