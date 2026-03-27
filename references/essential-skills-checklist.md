@@ -216,6 +216,35 @@ Skills per DM (kommentiere "SKILLS" auf instagram.com/albert.olgaard). Auch auf 
 Setup-Guide per DM (kommentiere "claude" auf instagram.com/byjoeym).
 Brief: Brand-URL + Style-Beispiele eingeben → Claude generiert Produkt-Visuals automatisch konsistent zur Brand.
 
+### Jens Heitmann (@jens.heitmann) — Claude Code fuer Business & Content
+Mehrere Claude Code Anwendungsfaelle:
+- **Obsidian + Claude Code** = "Second Brain Cheat Code" (DVv5bClkeqb) — Notizen → automatische Wissensbasis
+- **Social Media Manager** — Claude Code analysiert eigene Kanaele, auditiert Posts, verbessert Content (DVmw74XEbk7)
+- **Remotion + Claude Code** — Sprachgesteuerte Video-Schnitt-Automatisierung (DVeMX3EiaNO)
+- **3 neue SaaS-Features** von Claude Code (DVmPZh0EuCq) — kritische Updates fuer SaaS-Entwicklung
+
+### kylewhitrow — Weitere Guides (@kylewhitrow)
+- **Meta Ads mit Claude Code** — Automatisiertes Aufsetzen neuer Meta-Kampagnen (DVwOqipEc17, kommentiere "Meta")
+- **Remotion Editing** — Kostenloser Setup-Guide (DVtWNvEjT8_, kommentiere "Remotion")
+
+### Tobias Schreiber (@tobiasschreiber_) — Claude Code Setup (DE)
+Deutschsprachiger Guide: "Die meisten richten Claude Code ein wie eine leere App — und wundern sich, warum es nicht funktioniert." (DU5neioDo3K, kommentiere "SETUP")
+
+### The AI Impact (@theaiimpact) — Marketing Skills Library
+"Turn Claude Code into your marketing team. A full marketing skills library for Claude Code — These aren't just prompts." (DVawy16Ed9t)
+
+### Chase AI (@chase.h.ai) — Claude Code Guides
+"Comment 'agent' to get my Claude code guides" (DVpFr4xDTpE) — Sammlung von Claude Code Agent-Guides.
+
+### Brooke | AI Education (@brookeaimarketing)
+"Did Claude in Chrome just make Manychat obsolete?" — Claude in Chrome automatisch antwortet auf TikTok-Kommentare mit passenden Lead Magnets (DVNPtr7idB8).
+
+### Brock Mesarich (@aifornontechies) — Claude Cowork Plugins
+"Anthropic just released plugins for Claude Cowork that turn it into a [powerful tool]" — Liste: kommentiere "PLUGINS" (DVYx71hiYU2).
+
+### Lucas Krawczak — Claude API Kostenoptimierung (@lucaskrawczak)
+"Underoptimized providers are cooking your wallet" — Tipps zu kostenguenstigem Claude API-Routing (DVNiKU0DqQq).
+
 ---
 
 ## E. MCP Server — Top-Empfehlungen nach Kategorie
@@ -384,3 +413,68 @@ Alle auf `anthropic.skilljar.com` — kostenlos, mit Abschlusszertifikat.
 - [x] Git und GitHub konfiguriert
 - [x] RuFlo/claude-flow installiert
 ```
+
+---
+
+## J. Website-Erstellung mit Claude Code (Transkript-Erkenntnisse)
+
+### Vollstaendige kostenloses Website-Pipeline
+*(Quelle: Instagram Reel @tenfoldmarc / DWCPx0PkQzA — Whisper-Transkript)*
+
+**4-Schritte-Setup fuer professionelle Websites:**
+1. Claude Code installieren (`claude` CLI)
+2. Framer Motion installieren (Website-Animationen)
+3. **UI UX Pro Max Skill** herunterladen (Claude Code Skill fuer UI-Design)
+4. **21st.dev** einbinden — komponentenbasierte UI-Bibliothek
+
+**21st.dev** (`21st.dev`) — Magic UI-Komponentenbibliothek fuer Claude Code. Pasted one line in Claude Code → generates beautiful animated websites. Alternative zu shadcn/ui mit besserem Animationssupport.
+
+```bash
+# Typical one-liner setup (from the GitHub repo)
+# Creator has a repo: comment "website" on post for link
+claude "Create a website using UI UX Pro Max skill + 21st.dev components + Framer Motion"
+```
+
+---
+
+## K. RuFlo / claude-flow — Vollstaendige Erkenntnisse
+*(Quelle: @nicksadler.io / DWNB0t9iMhv — Whisper-Transkript)*
+
+**Vollstaendiges Zitat:**
+> "Someone just built the most powerful cloud tool on the planet. 60 agents working together simultaneously all getting smarter every single run. It's called Rooflow, formerly Claude Flow and this thing is insane. One agent handles planning, another writes code, another runs tests, another checks security. All running in parallel, all sharing memory, all improving from each other after every single run. But here's the part that blew my mind. It slashes your Claude API costs by 75%. Basic tasks route to a free tier automatically, advanced tasks route to the optimal model. Your Claude subscription just became 2.5 times more powerful. Ranked number one in agent frameworks on GitHub. Over 14,000 stars, 100% open source free, zero additional subscriptions, maximum intelligence."
+
+**Key Facts:**
+- Name: **RuFlo** (ehem. claude-flow) — `github.com/ruvnet/claude-flow`
+- 60 Agents parallel mit geteiltem Memory
+- 75% API-Kosteneinsparung durch automatisches Model-Routing
+- #1 Agent Framework auf GitHub, 14.000+ Stars
+- Selbstlernend: Agents verbessern sich nach jeder Run
+
+---
+
+## L. Freie Transkriptions-Pipeline (lokal, kein Account noetig)
+
+Fuer zukuenftige Video-Analysen — vollstaendig kostenlos:
+
+```bash
+# 1. yt-dlp installieren
+pip install yt-dlp
+
+# 2. ffmpeg installieren (Windows)
+winget install ffmpeg
+
+# 3. Whisper installieren
+pip install openai-whisper
+
+# 4. Video herunterladen (oeffentliche Posts ohne Login!)
+python -m yt_dlp -f "mp4/best" "https://www.instagram.com/p/POST_ID/" -o "reel.mp4"
+
+# 5. Transkribieren
+python -c "import whisper; m=whisper.load_model('tiny'); print(m.transcribe('reel.mp4')['text'])"
+```
+
+**Hinweise:**
+- `tiny` Modell: schnell, ~72MB, gut fuer kurze Reels (unter 3 Min)
+- `base` oder `small` fuer bessere Qualitaet bei laengeren Videos
+- Funktioniert fuer alle oeffentlichen Instagram, TikTok, YouTube Videos
+- Chrome muss geschlossen sein wenn `--cookies-from-browser chrome` benoetigt wird
