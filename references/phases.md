@@ -426,6 +426,42 @@ Das Script:
 
 **Wichtig:** Nie ohne Freigabe installieren. Der User muss wissen, dass jedes Session-Ende einen Commit+Push auslöst.
 
+### Auto-Pull Hook einrichten (nach Freigabe)
+
+Als Ergänzung zum Auto-Commit+Push-Hook biete dem User an, beim Sessionstart automatisch zu prüfen, ob der lokale Stand aktuell ist. Dieser Skill liefert ein fertiges Script: `scripts/auto-git-pull.cjs`
+
+Installation (nach User-Freigabe):
+
+1. Script ins Projekt kopieren:
+   ```bash
+   cp <skill-path>/scripts/auto-git-pull.cjs .claude/scripts/auto-git-pull.cjs
+   ```
+
+2. SessionStart-Hook in `.claude/settings.json` (oder global in `~/.claude/settings.json`) registrieren:
+   ```json
+   {
+     "hooks": {
+       "SessionStart": [
+         {
+           "type": "command",
+           "command": "node .claude/scripts/auto-git-pull.cjs",
+           "timeout": 15000
+         }
+       ]
+     }
+   }
+   ```
+
+Das Script:
+- Prüft ob das Verzeichnis ein Git-Repo mit Remote ist (sonst: kein Eingriff)
+- Fetcht den aktuellen Stand vom Remote (kein Auto-Merge)
+- Zählt, wie viele Commits lokal fehlen
+- Wenn hinter Remote: `git pull --ff-only` — nur Fast-Forward, kein ungewollter Merge-Commit
+- Wenn Pull nicht möglich (z.B. divergente History): klare Warnung, kein blindes Überschreiben
+- Empfohlen in Kombination mit dem Auto-Commit+Push-Hook: Push beim Session-Ende, Pull beim Session-Start
+
+**Wichtig:** Diesen Hook global (`~/.claude/settings.json`) registrieren, damit er für alle Git-Projekte greift. In reinen Nicht-Git-Verzeichnissen tut das Script nichts.
+
 Backups sollen berücksichtigen:
 - Repo-Backup, Export-/Build-Artefakte, Datenbankdumps, Uploads/Medien
 - Lokale Projektzustände, Meilensteine, Wiederanlauf nach Fehlern
