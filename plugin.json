@@ -1,6 +1,6 @@
 {
   "name": "claude-project-doctor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Audits and conservatively modernizes Claude Code projects. Checks CLAUDE.md, settings, hooks, skills, rules, Git, backups, security, and RuFlo integration against best practices. Works with any project — suggests missing skills, fixes inconsistencies, sets up auto-backup, and documents everything.",
   "skills": [
     {
