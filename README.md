@@ -1,93 +1,102 @@
 # Claude Project Doctor
 
-Audits and conservatively modernizes any Claude Code project — structure, CLAUDE.md, settings, hooks, skills, rules, Git, backups, security, and integrations.
+Turns any Claude Code installation into a **fully autonomous, security-hardened, and self-improving system** — with one install command.
 
-## What it does
+## What it installs
 
-- **Full Audit**: Scans your project structure, CLAUDE.md, settings, hooks, skills, rules, Git, backups, security, and integrations
-- **Conservative Improvements**: Only reversible, minimal-invasive changes — nothing breaks
-- **Auto-Backup**: Sets up Git auto-commit+push hooks so your work is always backed up
-- **Essential Skills Checklist**: Checks 7 categories every project needs (security, Git/backup, docs, code quality, organization, Claude hygiene, deployment)
-- **Smart Skill Discovery**: Searches online for skills that fit your project and recommends them
-- **3 Upgrade Paths**: In-place fix (A), Git worktree (B), or parallel rebuild (C) — you choose
+**Security Harness (5 layers):**
+- `PreToolUse[Bash]` — blocks dangerous shell commands before execution
+- `PreToolUse[Write|Edit]` — scans for hardcoded secrets before writing files
+- `PostToolUse[Bash]` — detects package installs, triggers dependency audit
+- `Stop` Quality Gate — Haiku LLM checks every session for secrets, SQL injection, command injection, missing tests
+- Anthropic `security-guidance` plugin (recommended separately)
+
+**Self-Improving Memory:**
+- Auto Memory Bridge — imports/syncs `MEMORY.md` on every session
+- Intelligence Graph — PageRank + Trigram-Jaccard recall, consolidates on session end
+- SQLite + HNSW pattern learning — learns which agent to route each task to
+- `auto-reflect` — writes session reflection on Stop
+
+**Full Hook Pipeline:** SessionStart → UserPromptSubmit → PreToolUse → PostToolUse → Stop → SessionEnd → PreCompact
 
 ## Install
 
-### Option 1: Git Clone (recommended)
+### One command (recommended)
 
-Works on **Windows, Mac, and Linux**:
-
+**macOS / Linux / Git Bash:**
 ```bash
-cd ~/.claude/skills/
-git clone https://github.com/tombaustian/claude-project-doctor.git
+git clone https://github.com/tombaustian/claude-project-doctor.git \
+  ~/.claude/skills/claude-project-doctor && \
+  bash ~/.claude/skills/claude-project-doctor/install.sh
 ```
 
-On Windows, `~` means your user folder (`C:\Users\YourName`). If the `.claude/skills/` folder doesn't exist yet, create it first.
+**Windows PowerShell:**
+```powershell
+git clone https://github.com/tombaustian/claude-project-doctor.git `
+  "$env:USERPROFILE\.claude\skills\claude-project-doctor"
+pwsh "$env:USERPROFILE\.claude\skills\claude-project-doctor\install.ps1"
+```
 
-### Option 2: Download ZIP
+The install script:
+1. Copies all helper scripts to `~/.claude/helpers/`
+2. Writes the complete hook pipeline into `~/.claude/settings.json`
+3. Backs up your existing `settings.json` before touching it
 
-1. Go to [github.com/tombaustian/claude-project-doctor](https://github.com/tombaustian/claude-project-doctor)
-2. Click the green **"Code"** button, then **"Download ZIP"**
-3. Extract the ZIP contents to your skills folder:
+Restart Claude Code after installing to activate the hooks.
 
-| Platform | Path |
-|----------|------|
-| **Windows** | `C:\Users\YourName\.claude\skills\claude-project-doctor\` |
-| **Mac** | `~/.claude/skills/claude-project-doctor/` |
-| **Linux** | `~/.claude/skills/claude-project-doctor/` |
-
-4. Restart Claude Code
-
-### Option 3: Claude Code CLI (if you have it)
-
-If you have the CLI version installed (`npm install -g @anthropic-ai/claude-code`):
+### Claude Code plugin command
 
 ```bash
 claude plugin add --from github:tombaustian/claude-project-doctor
 ```
 
-### Verify installation
+> Note: This installs the skill only. Run `install.sh` / `install.ps1` afterwards to also install the hooks.
 
-After installing, the skill should appear in Claude Code's skill list. You can check by typing `/claude-project-doctor` — if it autocompletes, you're good.
+### Optional: security tools
+
+```bash
+# SAST scanner (catches vulnerable code patterns)
+npm install -g semgrep
+
+# Secret scanner (scans git history for leaked credentials)
+brew install gitleaks          # macOS
+scoop install gitleaks         # Windows
+
+# OWASP Top 10:2025 skill
+claude skills install agamm/claude-code-owasp
+```
 
 ## Usage
 
-Just say any of these in Claude Code:
+After installing, the doctor checks your system automatically at every session start. You'll see a status line like:
 
-- "Project Doctor"
-- "Audit my project"
-- "Check my Claude setup"
-- "Is my setup good?"
-- "Clean up my project"
-- "Prüf mein Projekt" (German)
+```
+[Doctor] OK — Memory: 12 Einträge | Intelligence: 47 Patterns + Graph ✓ | Hooks: 9 Events konfiguriert
+```
 
-Or use the slash command:
+To run a full project audit, say any of:
 
+- `"Project Doctor"` / `"Doctor"` / `"Audit my project"`
+- `"Check my Claude setup"` / `"Is my setup good?"`
+- `"Prüf mein Setup"` / `"Optimiere mein Claude-Setup"`
+
+Or invoke directly:
 ```
 /claude-project-doctor
 ```
 
-## How it works
+## What the audit covers
 
-1. **Audit** — Scans your project and reports what's good, outdated, missing, and what should stay untouched
-2. **Recommend** — Suggests Option A (in-place fix), B (worktree), or C (parallel rebuild)
-3. **You approve** — Nothing changes without your OK
-4. **Improve** — Adds missing files, fixes inconsistencies, sets up Git/backups, recommends skills
-5. **Report** — Documents everything that changed and why
-
-## Key principles
-
-- Conservative and reversible — existing structures take priority
-- Never breaks what works
-- Minimal-invasive improvements only
-- Documents every decision
-- Respects global claude-flow/RuFlo installations
-- Asks before making changes
+1. **Phase 0** — Checks if this plugin has updates on GitHub
+2. **Phase 1** — Full audit (structure, security, hooks, memory, integrations) — reports first, no changes
+3. **You choose** — Option A (in-place fix), B (Git worktree), or C (parallel rebuild)
+4. **Phases 2–12** — Conservative improvements after your approval
 
 ## Requirements
 
 - Claude Code (Desktop App or CLI)
-- Any project directory
+- Node.js ≥ 18
+- Git
 
 ## License
 
