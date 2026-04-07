@@ -1,11 +1,15 @@
 {
   "name": "claude-project-doctor",
-  "version": "1.1.0",
-  "description": "Audits and conservatively modernizes Claude Code projects. Checks CLAUDE.md, settings, hooks, skills, rules, Git, backups, security, and RuFlo integration against best practices. Works with any project — suggests missing skills, fixes inconsistencies, sets up auto-backup, and documents everything.",
+  "version": "2.0.0",
+  "description": "Vollautonomes, sicherheitsgehärtetes Claude Code Setup: Security-Harness (5 Lagen), Self-Improving Memory, Intelligence Router, automatische Hook-Pipeline. Includes skill + helper scripts + install script.",
   "skills": [
     {
       "path": ".",
       "name": "claude-project-doctor"
     }
-  ]
+  ],
+  "install": {
+    "windows": "pwsh install.ps1",
+    "unix": "bash install.sh"
+  }
 }
