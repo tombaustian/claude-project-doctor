@@ -78,22 +78,14 @@ async function main() {
 
 const handlers = {
   'route': () => {
-    // Inject ranked intelligence context before routing
-    if (intelligence && intelligence.getContext) {
-      try {
-        const ctx = intelligence.getContext(prompt);
-        if (ctx) console.log(ctx);
-      } catch (e) { /* non-fatal */ }
-    }
-    // Phase 2: prefer learning router, fall back to static keyword router
+    // Persist routing decision for post-task learning — no output to Claude context
     const routeFn = (routerLearning && routerLearning.routeTaskWithLearning)
       ? (p) => routerLearning.routeTaskWithLearning(p)
       : (router && router.routeTask ? (p) => router.routeTask(p) : null);
 
     if (routeFn) {
-      const result = routeFn(prompt);
-      // Phase 5: persist routing decision so post-task can record feedback
       try {
+        const result = routeFn(prompt);
         const dir = path.dirname(LAST_ROUTING_PATH);
         if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
         fs.writeFileSync(LAST_ROUTING_PATH, JSON.stringify({
@@ -105,25 +97,6 @@ const handlers = {
           ts:         Date.now(),
         }), 'utf-8');
       } catch { /* non-fatal */ }
-      // Format output for Claude Code hook consumption
-      const sourceTag = result.source === 'learned' ? ' [gelernt]' : '';
-      const output = [
-        `[INFO] Routing task: ${prompt.substring(0, 80) || '(no prompt)'}`,
-        '',
-        'Routing Method',
-        `  - Method: ${result.source === 'learned' ? 'learned-patterns' : 'keyword'}`,
-        `  - Backend: ${result.source === 'learned' ? 'router-learning' : 'keyword matching'}`,
-        `  - Latency: ${(Math.random() * 0.5 + 0.1).toFixed(3)}ms`,
-        '',
-        '+------------------- Primary Recommendation -------------------+',
-        `| Agent: ${(result.agent + sourceTag).padEnd(53)}|`,
-        `| Confidence: ${(result.confidence * 100).toFixed(1)}%${' '.repeat(44)}|`,
-        `| Reason: ${result.reason.substring(0, 53).padEnd(53)}|`,
-        '+--------------------------------------------------------------+',
-      ];
-      console.log(output.join('\n'));
-    } else {
-      console.log('[INFO] Router not available, using default routing');
     }
   },
 
@@ -137,7 +110,6 @@ const handlers = {
         process.exit(1);
       }
     }
-    console.log('[OK] Command validated');
   },
 
   'post-edit': () => {
@@ -153,7 +125,6 @@ const handlers = {
         intelligence.recordEdit(file);
       } catch (e) { /* non-fatal */ }
     }
-    console.log('[OK] Edit recorded');
   },
 
   'session-restore': () => {
@@ -164,21 +135,7 @@ const handlers = {
         session.start && session.start();
       }
     } else {
-      // Minimal session restore output
-      const sessionId = `session-${Date.now()}`;
-      console.log(`[INFO] Restoring session: %SESSION_ID%`);
-      console.log('');
-      console.log(`[OK] Session restored from %SESSION_ID%`);
-      console.log(`New session ID: ${sessionId}`);
-      console.log('');
-      console.log('Restored State');
-      console.log('+----------------+-------+');
-      console.log('| Item           | Count |');
-      console.log('+----------------+-------+');
-      console.log('| Tasks          |     0 |');
-      console.log('| Agents         |     0 |');
-      console.log('| Memory Entries |     0 |');
-      console.log('+----------------+-------+');
+      // No output — silent restore
     }
     // Initialize intelligence graph after session restore
     if (intelligence && intelligence.init) {
@@ -204,7 +161,6 @@ const handlers = {
     if (session && session.end) {
       session.end();
     } else {
-      console.log('[OK] Session ended');
     }
   },
 
@@ -216,8 +172,6 @@ const handlers = {
     if (router && router.routeTask && prompt) {
       const result = router.routeTask(prompt);
       console.log(`[INFO] Task routed to: ${result.agent} (confidence: ${result.confidence})`);
-    } else {
-      console.log('[OK] Task started');
     }
   },
 
@@ -238,7 +192,6 @@ const handlers = {
         }
       } catch (e) { /* non-fatal */ }
     }
-    console.log('[OK] Task completed');
   },
 
   'stats': () => {
@@ -262,8 +215,6 @@ const handlers = {
         fs.writeFileSync(triggerPath, JSON.stringify({ cmd: cmd.slice(0, 200), cwd: process.cwd(), ts: Date.now() }), 'utf-8');
         console.log('[SECURITY] Package install detected — dep-audit-hook will scan for vulnerabilities');
       } catch { /* non-fatal */ }
-    } else {
-      console.log('[OK] Bash completed');
     }
   },
 
@@ -271,10 +222,10 @@ const handlers = {
   'pre-edit': () => {
     const filePath = hookInput.file_path || (hookInput.tool_input && hookInput.tool_input.file_path) || '';
     const content  = hookInput.new_string || hookInput.content || (hookInput.tool_input && hookInput.tool_input.new_string) || '';
-    if (!content || content.length < 10) { console.log('[OK] Edit validated'); return; }
+    if (!content || content.length < 10) { return; }
 
-    // Skip binary/minified files and test files
-    if (/\.(min\.js|bundle\.js|lock|png|jpg|ico|woff)$/.test(filePath)) { console.log('[OK] Edit validated'); return; }
+    // Skip binary/minified files
+    if (/\.(min\.js|bundle\.js|lock|png|jpg|ico|woff)$/.test(filePath)) { return; }
 
     // Common secret patterns — check for obvious hardcoded values (not env-var references)
     const secretPatterns = [
@@ -296,7 +247,6 @@ const handlers = {
         }
       }
     }
-    console.log('[OK] Edit validated');
   },
 };
 
@@ -308,10 +258,7 @@ const handlers = {
       // Hooks should never crash Claude Code - fail silently
       console.log(`[WARN] Hook ${command} encountered an error: ${e.message}`);
     }
-  } else if (command) {
-    // Unknown command - pass through without error
-    console.log(`[OK] Hook: ${command}`);
-  } else {
+  } else if (!command) {
     console.log('Usage: hook-handler.cjs <route|pre-bash|post-edit|session-restore|session-end|pre-task|post-task|stats>');
   }
 }

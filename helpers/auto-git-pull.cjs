@@ -64,10 +64,7 @@ if (!behindCheck.ok) process.exit(0);
 
 const behindCount = parseInt(behindCheck.output, 10);
 
-if (behindCount === 0) {
-  hookMessage(`[git-pull] ${branchName} ist aktuell. Kein Pull noetig.`);
-  process.exit(0);
-}
+if (behindCount === 0) process.exit(0); // up to date — silent
 
 // 6. We are behind — attempt fast-forward pull
 const pullResult = git('pull', '--ff-only', '--quiet');

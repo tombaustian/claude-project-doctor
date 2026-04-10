@@ -65,21 +65,13 @@ function detect() {
 }
 
 function writeEnvFile(vars) {
-  if (!ENV_FILE) {
-    // Not in a SessionStart context — print as info only
-    console.log('[SessionEnv] ENV_FILE not set (not in SessionStart context)');
-    for (const [k, v] of Object.entries(vars)) {
-      console.log(`  ${k}=${v}`);
-    }
-    return;
-  }
+  if (!ENV_FILE) return; // not in SessionStart context — skip silently
 
   try {
     const lines = Object.entries(vars).map(([k, v]) => `export ${k}="${v}"`).join('\n');
     fs.appendFileSync(ENV_FILE, lines + '\n', 'utf-8');
-    console.log(`[SessionEnv] Injected: ${Object.keys(vars).join(', ')}`);
   } catch (e) {
-    console.log(`[SessionEnv] Could not write env file: ${e.message}`);
+    process.stderr.write(`[SessionEnv] Could not write env file: ${e.message}\n`);
   }
 }
 

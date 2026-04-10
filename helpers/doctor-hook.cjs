@@ -27,6 +27,15 @@ const CLAUDE_DIR = path.join(HOME, '.claude');
 const SETTINGS   = path.join(CLAUDE_DIR, 'settings.json');
 const CWD        = process.cwd();
 
+// ─── 4-minute throttle: skip if last run was OK and recent ────────────────────
+const CACHE_PATH = path.join(HOME, '.claude-flow', 'data', 'doctor-last-run.json');
+try {
+  const cache = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
+  if (cache && cache.status === 'ok' && (Date.now() - cache.ts) < 4 * 60 * 1000) {
+    process.exit(0);
+  }
+} catch { /* no cache yet, run checks */ }
+
 // Derive project key the same way Claude Code does:
 // C:\Users\tomba  →  C--Users-tomba
 const PROJECT_KEY = CWD.replace(/\\/g, '/').replace(/[:/]/g, '-').replace(/^-+/, '');
@@ -205,12 +214,13 @@ try { checkSecuritySkills();   } catch { /* never crash Claude */ }
 
 // ─── Build output ─────────────────────────────────────────────────────────────
 
-// Healthy + no warnings → emit minimal info line or stay silent
+// Healthy + no warnings → silent exit, write cache
 if (issues.length === 0 && warnings.length === 0) {
-  if (info.length > 0) {
-    const summary = info.join(' | ');
-    process.stdout.write(JSON.stringify({ systemMessage: `[Doctor] OK — ${summary}` }));
-  }
+  try {
+    const cacheDir = path.dirname(CACHE_PATH);
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
+    fs.writeFileSync(CACHE_PATH, JSON.stringify({ status: 'ok', ts: Date.now() }), 'utf-8');
+  } catch { /* non-fatal */ }
   process.exit(0);
 }
 
@@ -225,6 +235,13 @@ if (warnings.length > 0) {
 if (info.length > 0) {
   info.forEach(i => lines.push(`  ✓ ${i}`));
 }
+
+// Write cache with 'issues' so throttle doesn't suppress on next run
+try {
+  const cacheDir = path.dirname(CACHE_PATH);
+  if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
+  fs.writeFileSync(CACHE_PATH, JSON.stringify({ status: 'issues', ts: Date.now() }), 'utf-8');
+} catch { /* non-fatal */ }
 
 process.stdout.write(JSON.stringify({ systemMessage: lines.join('\n') }));
 process.exit(0);

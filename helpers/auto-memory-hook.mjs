@@ -30,9 +30,9 @@ const CYAN = '\x1b[0;36m';
 const DIM = '\x1b[2m';
 const RESET = '\x1b[0m';
 
-const log = (msg) => console.log(`${CYAN}[AutoMemory] ${msg}${RESET}`);
-const success = (msg) => console.log(`${GREEN}[AutoMemory] ✓ ${msg}${RESET}`);
-const dim = (msg) => console.log(`  ${DIM}${msg}${RESET}`);
+const log = (msg) => process.stderr.write(`[AutoMemory] ${msg}\n`);
+const success = (msg) => process.stderr.write(`[AutoMemory] ✓ ${msg}\n`);
+const dim = (msg) => process.stderr.write(`  ${msg}\n`);
 
 // Ensure data dir
 if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
